@@ -40,14 +40,8 @@ export default function Home() {
   }
 
   return (
-    <main style={{ background: "#000", minHeight: "100vh", padding: 8 }}>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: 4,
-        }}
-      >
+    <main className="page">
+      <div className="gallery">
         {visiblePosts.map((post) => {
           const activeIndex = activeIndexes[post.id] || 0;
           const media = post.media || [];
@@ -55,16 +49,7 @@ export default function Home() {
           const hasMultiple = media.length > 1;
 
           return (
-            <div
-              key={post.id}
-              className="card"
-              style={{
-                aspectRatio: "1080 / 1350",
-                background: "#222",
-                overflow: "hidden",
-                position: "relative",
-              }}
-            >
+            <div key={post.id} className="card">
               {currentMedia?.url ? (
                 isVideo(currentMedia.name) ? (
                   <video
@@ -90,6 +75,7 @@ export default function Home() {
                   <button
                     className="overlay arrow left"
                     onClick={() => changeImage(post.id, -1, media.length)}
+                    aria-label="Previous attachment"
                   >
                     ‹
                   </button>
@@ -97,6 +83,7 @@ export default function Home() {
                   <button
                     className="overlay arrow right"
                     onClick={() => changeImage(post.id, 1, media.length)}
+                    aria-label="Next attachment"
                   >
                     ›
                   </button>
@@ -108,60 +95,94 @@ export default function Home() {
               )}
 
               <style jsx>{`
-                .card:hover .overlay {
-                  opacity: 1;
+                .page {
+                  background: #000;
+                  min-height: 100vh;
+                  padding: 0.5rem;
                 }
 
-                .overlay {
-                  opacity: 0;
-                  transition: 0.2s ease;
-                  position: absolute;
-                  z-index: 5;
-                  background: rgba(0, 0, 0, 0.65);
-                  color: white;
+                .gallery {
+                  display: grid;
+                  grid-template-columns: repeat(3, minmax(0, 1fr));
+                  gap: 0.25rem;
                 }
 
-                .title {
-                  top: 8px;
-                  left: 8px;
-                  padding: 5px 8px;
-                  border-radius: 8px;
-                  font-size: 12px;
-                  max-width: 70%;
-                  font-weight: bold;
-                }
-
-                .arrow {
-                  top: 50%;
-                  transform: translateY(-50%);
-                  width: 32px;
-                  height: 32px;
-                  border-radius: 50%;
-                  border: none;
-                  cursor: pointer;
-                  font-size: 20px;
-                }
-
-                .left {
-                  left: 8px;
-                }
-
-                .right {
-                  right: 8px;
-                }
-
-                .counter {
-                  top: 8px;
-                  right: 8px;
-                  padding: 4px 8px;
-                  border-radius: 999px;
-                  font-size: 12px;
+                .card {
+                  aspect-ratio: 1080 / 1350;
+                  background: #222;
+                  overflow: hidden;
+                  position: relative;
+                  width: 100%;
                 }
 
                 .media {
                   width: 100%;
                   height: 100%;
                   object-fit: cover;
+                  display: block;
+                }
+
+                .overlay {
+                  opacity: 0;
+                  transition: opacity 0.2s ease;
+                  position: absolute;
+                  z-index: 5;
+                  background: rgba(0, 0, 0, 0.65);
+                  color: white;
+                }
+
+                .card:hover .overlay {
+                  opacity: 1;
+                }
+
+                .title {
+                  top: 2%;
+                  left: 2%;
+                  padding: 0.45em 0.7em;
+                  border-radius: 0.5em;
+                  font-size: clamp(9px, 1.2vw, 14px);
+                  max-width: 68%;
+                  font-weight: bold;
+                  line-height: 1.2;
+                }
+
+                .counter {
+                  top: 2%;
+                  right: 2%;
+                  padding: 0.35em 0.65em;
+                  border-radius: 999px;
+                  font-size: clamp(9px, 1.2vw, 14px);
+                  line-height: 1;
+                }
+
+                .arrow {
+                  top: 50%;
+                  transform: translateY(-50%);
+                  width: clamp(22px, 3vw, 36px);
+                  height: clamp(22px, 3vw, 36px);
+                  border-radius: 50%;
+                  border: none;
+                  cursor: pointer;
+                  font-size: clamp(14px, 2vw, 22px);
+                  line-height: 1;
+                }
+
+                .left {
+                  left: 2%;
+                }
+
+                .right {
+                  right: 2%;
+                }
+
+                @media (max-width: 600px) {
+                  .gallery {
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                  }
+
+                  .overlay {
+                    opacity: 1;
+                  }
                 }
               `}</style>
             </div>
