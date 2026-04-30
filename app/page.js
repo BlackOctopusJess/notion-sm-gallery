@@ -47,18 +47,19 @@ export default function Home() {
   return (
     <main className="page">
       <div className="toolbar">
-  <div className="titleText">BOS Marketing Preview</div>
+        <div className="titleText">BOS Marketing Preview</div>
 
-  <div className="actions">
-    <button onClick={loadPosts} className="button">
-      Refresh
-    </button>
+        <div className="actions">
+          <button onClick={loadPosts} className="button">
+            Refresh
+          </button>
 
-    <button onClick={() => setShowInfo(true)} className="button">
-      Info
-    </button>
-  </div>
-</div>
+          <button onClick={() => setShowInfo(true)} className="button">
+            Info
+          </button>
+        </div>
+      </div>
+
       {showInfo && (
         <div className="modalBackdrop" onClick={() => setShowInfo(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
@@ -66,7 +67,13 @@ export default function Home() {
               ×
             </button>
 
-            <h2>How to use this gallery</h2>
+            <h1>Link to gallery</h1>
+
+            <div className="example">
+              https://notion-sm-gallery.vercel.app
+            </div>
+
+            <h1>How to use this gallery</h1>
 
             <ol>
               <li>
@@ -76,34 +83,30 @@ export default function Home() {
               </li>
 
               <li>
-                <strong>Add a filter value.</strong>
+                <strong>Set a filter value.</strong>
                 <br />
-                Set the <code>Filter</code> select property, for example{" "}
+                Use the <code>Filter</code> select property, e.g.{" "}
                 <code>BGBH</code>.
               </li>
 
               <li>
-                <strong>Use a filtered link.</strong>
+                <strong>Create a filtered link.</strong>
                 <br />
                 Add <code>?filter=BGBH</code> to the end of the gallery URL.
               </li>
 
               <li>
-                <strong>Embed it in Notion.</strong>
+                <strong>Embed in Notion.</strong>
                 <br />
-                Type <code>/embed</code> in Notion, then paste the filtered URL.
+                Type <code>/embed</code>, then paste the filtered URL.
               </li>
 
               <li>
                 <strong>Refresh when needed.</strong>
                 <br />
-                Click <code>Refresh</code> after changing attachments in Notion.
+                Click Refresh after changing attachments in Notion.
               </li>
             </ol>
-
-            <div className="example">
-              https://notion-sm-gallery.vercel.app?filter=BGBH
-            </div>
           </div>
         </div>
       )}
@@ -114,17 +117,17 @@ export default function Home() {
           const media = post.media || [];
           const currentMedia = media[activeIndex];
           const hasMultiple = media.length > 1;
-          const video = isVideo(currentMedia?.name);
+          const isCurrentVideo = isVideo(currentMedia?.name);
 
           return (
             <div key={post.id} className="card">
               {currentMedia?.url ? (
-                video ? (
+                isCurrentVideo ? (
                   <video
                     src={currentMedia.url}
                     muted
                     playsInline
-                    className="media videoMedia"
+                    className="media"
                     onMouseEnter={(e) => {
                       e.currentTarget.controls = true;
                     }}
@@ -148,6 +151,7 @@ export default function Home() {
                   <button
                     className="overlay arrow left"
                     onClick={() => changeImage(post.id, -1, media.length)}
+                    aria-label="Previous attachment"
                   >
                     ‹
                   </button>
@@ -155,6 +159,7 @@ export default function Home() {
                   <button
                     className="overlay arrow right"
                     onClick={() => changeImage(post.id, 1, media.length)}
+                    aria-label="Next attachment"
                   >
                     ›
                   </button>
@@ -177,23 +182,23 @@ export default function Home() {
         }
 
         .toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-  gap: 8px;
-}
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 10px;
+        }
 
-.titleText {
-  color: white;
-  font-weight: 600;
-  font-size: clamp(14px, 2vw, 18px);
-}
+        .titleText {
+          color: white;
+          font-weight: 600;
+          font-size: clamp(14px, 2vw, 18px);
+        }
 
-.actions {
-  display: flex;
-  gap: 8px;
-}
+        .actions {
+          display: flex;
+          gap: 8px;
+        }
 
         .button {
           background: #111;
@@ -250,6 +255,7 @@ export default function Home() {
           font-size: clamp(9px, 1.2vw, 13px);
           max-width: 68%;
           font-weight: bold;
+          line-height: 1.2;
         }
 
         .counter {
@@ -269,6 +275,7 @@ export default function Home() {
           border: none;
           cursor: pointer;
           font-size: clamp(14px, 2vw, 22px);
+          line-height: 1;
         }
 
         .left {
@@ -296,19 +303,29 @@ export default function Home() {
           color: white;
           border: 1px solid #333;
           border-radius: 12px;
-          padding: 22px;
+          padding: 24px;
           max-width: 560px;
           width: 100%;
+          max-height: 85vh;
+          overflow-y: auto;
+          z-index: 60;
           font-size: 14px;
           line-height: 1.5;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         }
 
-        .modal h2 {
-          margin-top: 0;
+        .modal h1 {
+          font-size: 20px;
+          margin: 0 0 10px;
+        }
+
+        .modal h1:not(:first-of-type) {
+          margin-top: 24px;
         }
 
         .modal ol {
           padding-left: 22px;
+          margin-bottom: 0;
         }
 
         .modal li {
@@ -321,13 +338,13 @@ export default function Home() {
           right: 12px;
           background: transparent;
           color: white;
-          border: 0;
+          border: none;
           font-size: 26px;
           cursor: pointer;
+          z-index: 70;
         }
 
-        code,
-        .example {
+        code {
           background: #222;
           padding: 2px 5px;
           border-radius: 4px;
@@ -335,9 +352,11 @@ export default function Home() {
 
         .example {
           display: block;
-          margin-top: 14px;
-          padding: 10px;
+          background: #222;
+          padding: 12px;
+          border-radius: 8px;
           overflow-wrap: anywhere;
+          margin-bottom: 6px;
         }
       `}</style>
     </main>
