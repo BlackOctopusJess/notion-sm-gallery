@@ -47,15 +47,18 @@ export default function Home() {
   return (
     <main className="page">
       <div className="toolbar">
-        <button onClick={loadPosts} className="button">
-          Refresh
-        </button>
+  <div className="titleText">BOS Marketing Preview</div>
 
-        <button onClick={() => setShowInfo(true)} className="button">
-          Info
-        </button>
-      </div>
+  <div className="actions">
+    <button onClick={loadPosts} className="button">
+      Refresh
+    </button>
 
+    <button onClick={() => setShowInfo(true)} className="button">
+      Info
+    </button>
+  </div>
+</div>
       {showInfo && (
         <div className="modalBackdrop" onClick={() => setShowInfo(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
@@ -174,10 +177,23 @@ export default function Home() {
         }
 
         .toolbar {
-          display: flex;
-          gap: 8px;
-          margin-bottom: 10px;
-        }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 8px;
+}
+
+.titleText {
+  color: white;
+  font-weight: 600;
+  font-size: clamp(14px, 2vw, 18px);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
 
         .button {
           background: #111;
